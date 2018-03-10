@@ -7,6 +7,7 @@ from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from credentials import get_credentials
+from messages import list_messages
 
 flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 
@@ -20,16 +21,13 @@ def main():
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('gmail', 'v1', http=http)
 
-    results = service.users().labels().list(userId='me').execute()
-    labels = results.get('labels', [])
-
-    if not labels:
-        print('No labels found.')
+    messages = list_messages(service, 'me', 'submissions@formspree.io')
+    if not messages:
+        print('No messages')
     else:
-      print('Labels:')
-      for label in labels:
-        print(label['name'])
-
+        print('Messages:')
+        for msg in messages:
+            print(msg)
 
 if __name__ == '__main__':
     main()
