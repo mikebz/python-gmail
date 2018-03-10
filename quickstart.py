@@ -12,10 +12,8 @@ from messages import list_messages
 flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 
 def main():
-    """Shows basic usage of the Gmail API.
-
-    Creates a Gmail API service object and outputs a list of label names
-    of the user's Gmail account.
+    """
+    GMail API retrieval
     """
     credentials = get_credentials(flags)
     http = credentials.authorize(httplib2.Http())
