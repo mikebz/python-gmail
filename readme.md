@@ -5,7 +5,7 @@ This project is based on Google's walkthrough on how to use Python with GMail AP
 For full documentation on how to use Python with GMail API look here:
 https://developers.google.com/gmail/api/quickstart/python
 
-## setup
+## Setup
 1. create virtual environment using these steps: https://docs.python.org/3/library/venv.html
 1. activate it `$ source <venv>/bin/activate`
 1. install the required libraries `pip3 install -r requirements.txt`
