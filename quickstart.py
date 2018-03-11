@@ -1,13 +1,11 @@
 
 from __future__ import print_function
-import httplib2
 import argparse
 
-from apiclient import discovery
-from oauth2client import client
 from oauth2client import tools
 from credentials import get_credentials
 from messages import list_messages
+from service import build_service
 
 flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 
@@ -16,8 +14,7 @@ def main():
     GMail API retrieval
     """
     credentials = get_credentials(flags)
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('gmail', 'v1', http=http)
+    service = build_service(credentials)
 
     messages = list_messages(service, 'me', 'submissions@formspree.io')
     if not messages:
