@@ -1,6 +1,7 @@
 """Get a list of Messages from the user's mailbox.
 """
 
+import email
 from apiclient import errors
 
 
@@ -60,3 +61,37 @@ def list_message_with_labels(service, user_id, label_ids=[]):
         messages.extend(response['messages'])
 
     return messages
+
+def download_message(service, user_id, message_id ):
+    """Get a Message with given ID.
+
+    Args:
+    service: Authorized Gmail API service instance.
+    user_id: User's email address. The special value "me"
+    can be used to indicate the authenticated user.
+    msg_id: The ID of the Message required.
+
+    Returns:
+    A Message.
+    """
+    message = service.users().messages().get(userId=user_id, id=message_id).execute()
+    return message
+
+
+def download_mime_message(service, user_id, message_id):
+    """Get a Message and use it to create a MIME Message.
+
+    Args:
+    service: Authorized Gmail API service instance.
+    user_id: User's email address. The special value "me"
+    can be used to indicate the authenticated user.
+    msg_id: The ID of the Message required.
+
+    Returns:
+    A MIME Message, consisting of data from Message.
+    """
+    message = service.users().messages().get(userId=user_id, id=message_id,
+                                             format='raw').execute()
+    parser = email.parser.Parser()
+    mime_msg = parser.parsestr(message['raw'])
+    return mime_msg
