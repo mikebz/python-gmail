@@ -3,6 +3,7 @@ from credentials import get_credentials
 from service import build_service
 from messages import list_messages, list_message_with_labels
 from messages import download_message, download_mime_message
+from messages import get_message_html
 
 class TestCredentials(unittest.TestCase):
 
@@ -52,4 +53,9 @@ class TestCredentials(unittest.TestCase):
 
         message_id = messages[0]['id']
         message = download_mime_message(self._service, 'me', message_id)
+        self.assertTrue(message.items())
+        self.assertTrue(message.get("From"))
         self.assertIsNotNone(message)
+        
+        html = get_message_html(message)
+        self.assertIsNotNone(html)

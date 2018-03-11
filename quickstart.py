@@ -1,7 +1,4 @@
-
-from __future__ import print_function
 import argparse
-
 from oauth2client import tools
 from credentials import get_credentials
 from messages import list_messages

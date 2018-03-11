@@ -2,6 +2,8 @@
 """
 
 import email
+import pprint
+import base64
 from apiclient import errors
 
 
@@ -92,6 +94,25 @@ def download_mime_message(service, user_id, message_id):
     """
     message = service.users().messages().get(userId=user_id, id=message_id,
                                              format='raw').execute()
-    parser = email.parser.Parser()
-    mime_msg = parser.parsestr(message['raw'])
+    msg_str = base64.urlsafe_b64decode(message['raw']).decode('ASCII')
+    mime_msg = email.message_from_string(msg_str)
     return mime_msg
+
+
+def get_message_html(mime_message):
+    """
+    Given a mime message extract the HTML content of it
+    """
+    if not mime_message.is_multipart():
+        return None
+
+    html = None
+    for part in mime_message.get_payload():
+        if part.get_content_charset() is None:
+            continue
+
+        #charset = part.get_content_charset()
+        if part.get_content_type() == 'text/html':
+            html = part.get_payload(decode=True)
+
+    return html
