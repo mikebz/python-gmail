@@ -1,11 +1,13 @@
 import argparse
 import pprint
-from messages import download_mime_message, list_messages, get_message_html
 from oauth2client import tools
 from credentials import get_credentials
 from service import build_service
+from messages import download_mime_message, list_messages, get_message_html
+from html_parsing import get_message_content
 
 flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+
 
 def main():
     """
@@ -28,10 +30,11 @@ def main():
         # from formspree the well formed messages have a Reply-To header.
         if not reply_header:
             continue
+
+        html = get_message_html(mime_message)
+        content = get_message_content(html)
+        pprint.pprint(content)
         
-        print(reply_header)
-        print(get_message_html(mime_message))
-        return
 
 if __name__ == '__main__':
     main()

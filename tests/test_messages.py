@@ -4,6 +4,7 @@ from service import build_service
 from messages import list_messages, list_message_with_labels
 from messages import download_message, download_mime_message
 from messages import get_message_html
+from html_parsing import get_message_content
 
 class TestCredentials(unittest.TestCase):
 
@@ -59,3 +60,9 @@ class TestCredentials(unittest.TestCase):
         
         html = get_message_html(message)
         self.assertIsNotNone(html)
+
+        content = get_message_content(html)
+        self.assertIsNotNone(content)
+        self.assertIn('name', content.keys())
+        self.assertIn('email', content.keys())
+        self.assertIn('note', content.keys())
