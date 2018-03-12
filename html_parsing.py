@@ -31,9 +31,9 @@ def get_message_content(body):
             message_element = message_element.find_next_sibling('td')
 
             return {
-                'name': name_element.get_text(),
-                'email': email_element.get_text(),
-                'note': message_element.get_text()
+                'name': name_element.get_text().strip(),
+                'email': email_element.get_text().strip(),
+                'note': message_element.get_text().strip()
             }
 
     return None
