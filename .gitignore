@@ -106,3 +106,4 @@ venv.bak/
 
 # local additions
 client_secret.json
+secrets.py
