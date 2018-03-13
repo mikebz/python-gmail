@@ -24,17 +24,24 @@ class CapsuleAPI:
         headers = {'Authorization': f"Bearer {self._token}"}
         return headers
 
-    def file_contact(self, name, email, replied, note):
+    def file_contact(self, name, email, responded, note):
         """
         method to file the contact record in Capsule API
         """
-        pass
+        party = self.create_party(name, email, responded)
+        party_id = party['party']['id']
+        self.create_note(party_id, note)
+        return party
     
-    def create_party(self, name, email):
+    def create_party(self, name, email, responded=False):
         """
         create a contact and return the contact ID
         """
         hn = HumanName(name)
+        tags = [ {"name": "loader"}]
+        if responded:
+            tags.append({"name": "responded"})
+
         party = {
                 "party": {
                     "type": "person",
@@ -44,7 +51,7 @@ class CapsuleAPI:
                         "type": "Home",
                         "address": email
                     }],
-                    "tags": [ {"name": "loader"}],
+                    "tags": tags,
                 }
             }
         url = "https://api.capsulecrm.com/api/v2/parties"
@@ -54,6 +61,26 @@ class CapsuleAPI:
         result = r.json()
         return result
 
+    def create_note(self, id, note):
+        """
+        create a note and attach it to a party.
+        manual is here: https://developer.capsulecrm.com/v2/operations/Entries#createEntry
+        """
+        url = "https://api.capsulecrm.com/api/v2/entries"
+        entry = {
+                "entry" : {
+                    "party" : {
+                        "id" : id
+                    },
+                    "type" : "note",
+                    "content" : note
+                }
+            }
+        r = requests.post(url, headers=self._headers(), json=entry)
+        if not r.status_code == requests.codes.ok:
+            r.raise_for_status()        
+        result = r.json()
+        return result
 
     def delete_party(self, id):
         """

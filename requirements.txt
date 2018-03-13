@@ -3,6 +3,7 @@ attrs==17.4.0
 beautifulsoup4==4.6.0
 certifi==2018.1.18
 chardet==3.0.4
+Faker==0.8.12
 google-api-python-client==1.6.5
 httplib2==0.10.3
 idna==2.6
@@ -17,9 +18,11 @@ pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pylint==1.8.2
 pytest==3.4.2
+python-dateutil==2.7.0
 requests==2.18.4
 rsa==3.4.2
 six==1.11.0
+text-unidecode==1.2
 uritemplate==3.0.0
 urllib3==1.22
 wrapt==1.10.11
